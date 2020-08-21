@@ -277,7 +277,7 @@ public class CallActivity extends AppCompatActivity {
 
         //add stream to peer connection
         MediaStream mediaStream = factory.createLocalMediaStream("local");
-        //mediaStream.addTrack(localAudioTrack);
+        mediaStream.addTrack(localAudioTrack);
         mediaStream.addTrack(localVideoTrack);
         peerConnection.addStream(mediaStream);
 
