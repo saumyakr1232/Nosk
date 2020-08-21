@@ -282,6 +282,7 @@ public class CallActivity extends AppCompatActivity {
         peerConnection.addStream(mediaStream);
 
         if(isInitiator) doCall();
+
         else doAnswer();
     }
 
