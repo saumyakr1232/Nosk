@@ -219,7 +219,7 @@ public class CallActivity extends AppCompatActivity {
         SurfaceTextureHelper surfaceTextureHelper = SurfaceTextureHelper.create(Thread.currentThread().getName(), rootEglBase.getEglBaseContext());
         videoCapturer.initialize(surfaceTextureHelper, localVideoView.getContext(), videoSource.getCapturerObserver());
         videoCapturer.startCapture(1240, 720, 30);
-        VideoTrack localVideoTrack = factory.createVideoTrack("local", videoSource);
+        VideoTrack localVideoTrack = factory.createVideoTrack(userUid + "video", videoSource);
         localVideoTrack.addSink(localVideoView);
 
         //set ice candidates to null
@@ -270,14 +270,14 @@ public class CallActivity extends AppCompatActivity {
         //create audio track
         MediaConstraints audioConstraints = new MediaConstraints();
         AudioSource audioSource = factory.createAudioSource(audioConstraints);
-        AudioTrack localAudioTrack = factory.createAudioTrack("local", audioSource);
+        AudioTrack localAudioTrack = factory.createAudioTrack(userUid + "audio", audioSource);
         //peerConnection.addTrack(localAudioTrack);
         peerConnection.setAudioRecording(true);
         peerConnection.setAudioPlayout(true);
 
         //add stream to peer connection
-        MediaStream mediaStream = factory.createLocalMediaStream("local");
-        //mediaStream.addTrack(localAudioTrack);
+        MediaStream mediaStream = factory.createLocalMediaStream(userUid);
+        mediaStream.addTrack(localAudioTrack);
         mediaStream.addTrack(localVideoTrack);
         peerConnection.addStream(mediaStream);
 
@@ -300,6 +300,11 @@ public class CallActivity extends AppCompatActivity {
                 sdp.put("type", "offer");
                 sdp.put("desc", sessionDescription.description);
                 db.document("users/" + friendUid).update("sdp", sdp);
+            }
+
+            @Override
+            public void onCreateFailure(String s) {
+                Log.d("OFFER", s);
             }
         }, mediaConstraints);
     }
