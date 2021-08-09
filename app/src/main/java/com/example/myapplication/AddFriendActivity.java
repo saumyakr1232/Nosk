@@ -343,14 +343,16 @@ public class AddFriendActivity extends AppCompatActivity {
                                                 public void run() {
                                                     try {
                                                         Bitmap profile_pic_raw = BitmapFactory.decodeStream(finalImage_url.openConnection().getInputStream());
-                                                        Bitmap profile_pic = scaleBitmap(profile_pic_raw);
-                                                        imageCache.put(userdata.userUid, profile_pic);
-                                                        runOnUiThread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                adapter.notifyDataSetChanged();
-                                                            }
-                                                        });
+                                                        if (profile_pic_raw != null) {
+                                                            Bitmap profile_pic = scaleBitmap(profile_pic_raw);
+                                                            imageCache.put(userdata.userUid, profile_pic);
+                                                            runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    adapter.notifyDataSetChanged();
+                                                                }
+                                                            });
+                                                        }
                                                     } catch (IOException e) {
                                                         e.printStackTrace();
                                                     }
